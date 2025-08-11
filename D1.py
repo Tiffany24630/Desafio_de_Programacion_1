@@ -73,15 +73,15 @@ def tautologia(expr):
     expresion = extract_variables(expr)
     var = len(expresion)
 
-    for i in range(2**var):
+    for i in range(2**var): 
         val = {}
         for j, vars in enumerate(expresion):
             val[vars] = bool((i >> (var - j - 1)) & 1)
         
-        if not eval(expr, {}, val):
-            return False
+        if not eval(expr, {}, val): 
+            return False #Si hay alguna expresión que no sea verdadera
         
-    return True
+    return True #Si todas las expresiones son verdaderas
 
 # Función: equivalentes
 # Esta función determina si expr1 es equivalente a expr2, devuelve True;
