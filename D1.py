@@ -70,11 +70,12 @@ def tabla_verdad(expr):
 # Salida: booleano.
 
 def tautologia(expr):
-    var = len(extract_variables(expr))
+    expresion = extract_variables(expr)
+    var = len(expresion)
 
     for i in range(2**var):
         val = {}
-        for j, vars in enumerate(extract_variables(expr)):
+        for j, vars in enumerate(expresion):
             val[vars] = bool((i >> (var - j - 1)) & 1)
         
         if not eval(expr, {}, val):
@@ -114,14 +115,14 @@ while (op != 5):
         case 2: #Tautología
             print("Ingrese la expresión de la que desea comprobar si es una tautología:")
             expr = input()
-            mensg = "¿La expresión " + expr + " es una tautología? \n" + tautologia(expr)
+            mensg = "¿La expresión " + expr + " es una tautología? \n" + str(tautologia(expr))
 
         case 3: #Equivalentes
             print("Ingrese la primera expresión a comparar:")
             exprA = input()
             print("Ingrese la segunda expresión a comparar:")
             exprB = input()
-            mensg = "¿La expresión " + exprA + " es equivalente a " + exprB + "? \n" + equivalentes(exprA, exprB)
+            mensg = "¿La expresión " + exprA + " es equivalente a " + exprB + "? \n" + str(equivalentes(exprA, exprB))
 
         case 4: #Inferencia
             print("Ingrese la expresión de la cual quiere hacer una inferencia:")
