@@ -89,6 +89,49 @@ def tautologia(expr):
 # Entrada: expresión 1 y expresión 2.
 # Salida: booleano.
 def equivalentes(expr1, expr2):
+    # Extraer variables de ambas expresiones
+    vars1 = extract_variables(expr1)
+    vars2 = extract_variables(expr2)
+    
+    # Si las variables no son las mismas, no son equivalentes
+    if vars1 != vars2:
+        return False
+    
+    variables = vars1
+    n = len(variables)
+    
+    # Si no hay variables, comparamos directamente las expresiones constantes
+    if n == 0:
+        try:
+            # Evaluamos las expresiones sin variables
+            val1 = eval(expr1)
+            val2 = eval(expr2)
+            return val1 == val2
+        except:
+            # Si hay error en la evaluación, asumimos que no son equivalentes
+            return False
+    
+    # Generar todas las combinaciones de valores de verdad
+    for i in range(2**n):
+        # Crear el contexto de evaluación con los valores de verdad
+        context = {}
+        for j in range(n):
+            # Asignar True o False según el bit correspondiente
+            context[variables[j]] = bool((i >> (n - 1 - j)) & 1)
+        
+        try:
+            # Evaluar ambas expresiones con el mismo contexto
+            val1 = eval(expr1, {}, context)
+            val2 = eval(expr2, {}, context)
+            
+            # Si los valores difieren en alguna combinación, no son equivalentes
+            if val1 != val2:
+                return False
+        except:
+            # Si hay error en la evaluación, asumimos que no son equivalentes
+            return False
+
+    return True
     pass
 
 # Función: inferencia
