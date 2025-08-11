@@ -6,4 +6,4 @@ Integrantes:
 - Tiffany Salazar 24630
 - Ronald Catún
 - Ángel Armas
-- Reynaldo  
+- Reynaldo Pellecer
