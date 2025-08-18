@@ -60,8 +60,40 @@ def extract_variables(expression):
 # Entrada: expresión.
 # Salida: tabla de verdad como una lista de listas.
 
+# ================== GENERAR COMBINACIONES ================== (Tabla de verdad)
+def _generar_combinaciones(n):
+    if n == 0:
+        return [()]
+    combinaciones = []
+    for i in range(2**n):
+        binario = format(i, f'0{n}b')
+        combo = tuple(bit == '1' for bit in binario)
+        combinaciones.append(combo)
+    return combinaciones
+
+# ================== EVALUAR EXPRESIÓN CON CONTEXTO ================== (Tabla de verdad)
+def _evaluar_expresion(expr, variables, valores):
+    contexto = dict(zip(variables, valores))
+    contexto['implies'] = implies
+    contexto['iff'] = iff
+    try:
+        return eval(expr, {"__builtins__": {}}, contexto)
+    except:
+        raise ValueError(f"Error al evaluar la expresión: {expr}")
+
 def tabla_verdad(expr):
-    pass
+    try:
+        variables = extract_variables(expr)
+        combinaciones = _generar_combinaciones(len(variables))
+        tabla = []
+        for combo in combinaciones:
+            resultado = _evaluar_expresion(expr, variables, combo)
+            fila = list(combo) + [resultado]
+            tabla.append(fila)
+        return variables, tabla
+    except Exception as e:
+        raise ValueError(f"Error en tabla_verdad: {str(e)}")
+    
 
 # Función: tautologia
 # Esta función determina si la expresión es una tautología, devuelve True;
@@ -132,7 +164,6 @@ def equivalentes(expr1, expr2):
             return False
 
     return True
-    pass
 
 # Función: inferencia
 # Esta función determina los valores de verdad para una valuación de una proposición dada.
@@ -140,7 +171,45 @@ def equivalentes(expr1, expr2):
 # Salida: lista de listas.
 
 def inferencia(expr):
-    pass
+    # Separar la expresión en la parte lógica y el valor esperado
+    if expr.count('=') != 1:
+        raise ValueError("La expresión debe contener exactamente un '='")
+    
+    expr_logica, valor_str = expr.split('=', 1)
+    expr_logica = expr_logica.strip()
+    valor_str = valor_str.strip()
+    
+    # Validar el valor esperado (0 o 1)
+    if valor_str not in ['0', '1']:
+        raise ValueError("Valor esperado debe ser 0 o 1")
+    
+    valor_esperado = (valor_str == '1')
+    
+    # Extraer variables de la expresión lógica
+    variables = extract_variables(expr_logica)
+    n = len(variables)
+    soluciones = []
+    
+    # Generar todas las combinaciones de valores de verdad (2^n)
+    for i in range(2**n):
+        # Crear representación binaria de n bits
+        bin_str = bin(i)[2:].zfill(n)
+        # Convertir cada bit a booleano (True/False)
+        valores = [bit == '1' for bit in bin_str]
+        # Crear contexto: mapear variables a sus valores
+        contexto = dict(zip(variables, valores))
+        
+        try:
+            # Evaluar la expresión lógica en el contexto actual
+            resultado = eval(expr_logica, globals(), contexto)
+        except Exception as e:
+            raise ValueError(f"Error al evaluar: {expr_logica}") from e
+        
+        # Si coincide con el valor esperado, guardar la asignación
+        if resultado == valor_esperado:
+            soluciones.append(valores)
+            
+    return soluciones
 
 op = 0
 mensg = ""
