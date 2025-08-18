@@ -216,35 +216,35 @@ mensg = ""
 
 while (op != 5):
     print("Ingrese la opción que desea realizar: \n1. Tabla de verdad. \n2. Tautología. \n3. Euivalentes. \n4. Inferencia. \n5. Salir.")
-    op = input()
+    op = int(input())
 
     match op:
         case 1: #Tabla de verdad
             print("Ingrese la expresión de la que desea hacer una tabla de verdad:")
             expr = input()
-            mensg = "La tabla de verdad de la expresión " + expr + " es: \n" + tabla_verdad(expr)
+            print("La tabla de verdad de la expresión " + expr + " es: \n" + tabla_verdad(expr))
+            break
         
         case 2: #Tautología
             print("Ingrese la expresión de la que desea comprobar si es una tautología:")
             expr = input()
-            mensg = "¿La expresión " + expr + " es una tautología? \n" + str(tautologia(expr))
+            print("¿La expresión " + expr + " es una tautología? \n" + str(tautologia(expr)))
+            break
 
         case 3: #Equivalentes
             print("Ingrese la primera expresión a comparar:")
             exprA = input()
             print("Ingrese la segunda expresión a comparar:")
             exprB = input()
-            mensg = "¿La expresión " + exprA + " es equivalente a " + exprB + "? \n" + str(equivalentes(exprA, exprB))
+            print("¿La expresión " + exprA + " es equivalente a " + exprB + "? \n" + str(equivalentes(exprA, exprB)))
+            break
 
         case 4: #Inferencia
             print("Ingrese la expresión de la cual quiere hacer una inferencia:")
             expr = input()
-            mensg = "La inferencia de la expresión " + expr + " es: \n" + inferencia(expr)
+            print("La inferencia de la expresión " + expr + " es: \n" + inferencia(expr))
+            break
 
         case 5: #Salir
-            mensg = "Ha seleccionado salir..."
-
-        case _: #Default
-            mensg = "Ingrese una opción correcta..."
-
-    print(mensg)
+            print("Ha seleccionado salir...")
+            break
