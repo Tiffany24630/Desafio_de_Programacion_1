@@ -185,29 +185,33 @@ def inferencia(expr):
     
     valor_esperado = (valor_str == '1')
     
-    # Extraer variables de la expresión lógica
-    variables = extract_variables(expr_logica)
-    n = len(variables)
+    # Extraer variables de la expresión lógica (similar a tautología)
+    expresion = extract_variables(expr_logica)
+    var = len(expresion)
     soluciones = []
-    
-    # Generar todas las combinaciones de valores de verdad (2^n)
-    for i in range(2**n):
-        # Crear representación binaria de n bits
-        bin_str = bin(i)[2:].zfill(n)
-        # Convertir cada bit a booleano (True/False)
-        valores = [bit == '1' for bit in bin_str]
-        # Crear contexto: mapear variables a sus valores
-        contexto = dict(zip(variables, valores))
+
+    # Generar todas las combinaciones de valores de verdad (similar a tautología)
+    for i in range(2**var): 
+        val = {}
+        for j, vars in enumerate(expresion):
+            val[vars] = bool((i >> (var - j - 1)) & 1)
         
+        # Evaluar la expresión lógica con los valores actuales
         try:
-            # Evaluar la expresión lógica en el contexto actual
-            resultado = eval(expr_logica, globals(), contexto)
+            # Incluir implies e iff en el contexto de evaluación
+            val['implies'] = implies
+            val['iff'] = iff
+            resultado = eval(expr_logica, {"__builtins__": {}}, val)
         except Exception as e:
             raise ValueError(f"Error al evaluar: {expr_logica}") from e
         
-        # Si coincide con el valor esperado, guardar la asignación
+        # Si el resultado coincide con el valor esperado, agregar la combinación
         if resultado == valor_esperado:
-            soluciones.append(valores)
+            # Crear la lista de valores booleanos en el orden correcto
+            combo = []
+            for vars in expresion:
+                combo.append(val[vars])
+            soluciones.append(combo)
             
     return soluciones
 
@@ -215,14 +219,14 @@ op = 0
 mensg = ""
 
 while (op != 5):
-    print("Ingrese la opción que desea realizar: \n1. Tabla de verdad. \n2. Tautología. \n3. Euivalentes. \n4. Inferencia. \n5. Salir.")
+    print("Ingrese la opción que desea realizar: \n1. Tabla de verdad. \n2. Tautología. \n3. Equivalentes. \n4. Inferencia. \n5. Salir.")
     op = int(input())
 
     match op:
         case 1: #Tabla de verdad
             print("Ingrese la expresión de la que desea hacer una tabla de verdad:")
             expr = input()
-            print("La tabla de verdad de la expresión " + expr + " es: \n" + tabla_verdad(expr))
+            print("La tabla de verdad de la expresión " + str(expr) + " es: \n" + str(tabla_verdad(expr)))
             break
         
         case 2: #Tautología
@@ -242,7 +246,7 @@ while (op != 5):
         case 4: #Inferencia
             print("Ingrese la expresión de la cual quiere hacer una inferencia:")
             expr = input()
-            print("La inferencia de la expresión " + expr + " es: \n" + inferencia(expr))
+            print("La inferencia de la expresión " + expr + " es: \n" + str(inferencia(expr)))
             break
 
         case 5: #Salir
