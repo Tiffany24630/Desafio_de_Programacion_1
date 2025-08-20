@@ -222,7 +222,7 @@ while (op != 5):
         case 1: #Tabla de verdad
             print("Ingrese la expresión de la que desea hacer una tabla de verdad:")
             expr = input()
-            print("La tabla de verdad de la expresión " + expr + " es: \n" + tabla_verdad(expr))
+            print("La tabla de verdad de la expresión " + str(expr) + " es: \n" + str(tabla_verdad(expr)))
             break
         
         case 2: #Tautología
