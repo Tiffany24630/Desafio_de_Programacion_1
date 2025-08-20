@@ -4,6 +4,6 @@ Matemática Discreta
 Sección: 20
 Integrantes:
 - Tiffany Salazar 24630
-- Ronald Catún
+- Ronald Catún 19789
 - Ángel Armas
 - Reynaldo Pellecer
